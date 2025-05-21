@@ -1,4 +1,0 @@
-obj/Debug/net9.0/Protos/Library.cs \
-obj/Debug/net9.0/Protos/LibraryGrpc.cs: /Users/vivekkosare/.nuget/packages/grpc.tools/2.72.0/build/native/include/google/protobuf/empty.proto\
- /Users/vivekkosare/.nuget/packages/grpc.tools/2.72.0/build/native/include/google/protobuf/timestamp.proto\
- Protos/library.proto
