@@ -15,7 +15,7 @@ service LibraryService{
     rpc GetBooksBorrowedByUserWithinTimeFrame(UserBorrowedBooksWithinTimeFrameRequest)
         returns (UserBorrowedBooks);
     rpc GetOtherBooksBorrowedByUserWhoBorrowedThisBook(OtherBooksBorrowedByUserWhoBorrowedThisBookRequest)
-        returns (OtherBooksBorrowedByUserWhoBorrowedThisBook);
+        returns (OtherBooksBorrowedByUsers);
     rpc GetBookReadingRate(BookReadingRateRequest) returns (BookReadingRate);    
 }
 
@@ -110,9 +110,13 @@ message OtherBooksBorrowedByUserWhoBorrowedThisBookRequest{
     string book_id = 1;
 }
 
-message OtherBooksBorrowedByUserWhoBorrowedThisBook{
-    string user_id = 1;
-    repeated Book books = 2;
+message OtherBooksBorrowedByUser{
+    User user = 1;
+    repeated BorrowedBookDetail borrowed_books_detail_list = 2;
+}
+
+message OtherBooksBorrowedByUsers{
+    repeated OtherBooksBorrowedByUser other_books_borrowed_by_users = 1;
 }
 
 message BookReadingRateRequest{
@@ -124,4 +128,12 @@ message BookReadingRateRequest{
 message BookReadingRate{
     string book_id = 1;
     int32 reading_rate = 2;
+}
+
+message BorrowedBookDetail{
+    string book_id = 1;
+    string book_name = 2;
+    google.protobuf.Timestamp borrow_date = 3;
+    google.protobuf.Timestamp return_date = 4;
+    google.protobuf.Timestamp due_date = 5;
 }

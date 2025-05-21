@@ -28,18 +28,14 @@ namespace LibraryAPI.Utils
                 booksCollection.InsertMany(books);
             }
 
-            // await booksCollection.UpdateManyAsync(
-            //     Builders<Book>.Filter.Or(
-            //         Builders<Book>.Filter.Exists(b => b.TotalCopies, false),
-            //         Builders<Book>.Filter.Eq(b => b.TotalCopies, 0)
-            //     ),
-            //     Builders<Book>.Update.Set(b => b.TotalCopies, 15)
-            // );
-
             await booksCollection.UpdateManyAsync(
-                Builders<Book>.Filter.Gt(b => b.TotalCopies, 0),
+                Builders<Book>.Filter.Or(
+                    Builders<Book>.Filter.Exists(b => b.TotalCopies, false),
+                    Builders<Book>.Filter.Eq(b => b.TotalCopies, 0)
+                ),
                 Builders<Book>.Update.Set(b => b.TotalCopies, 70)
             );
+
 
             if (usersCollection.CountDocuments(FilterDefinition<User>.Empty) == 0)
             {

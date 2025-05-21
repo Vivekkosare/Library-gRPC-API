@@ -148,10 +148,50 @@ namespace LibraryAPI.Services
             }
             return mostBorrowedBooks;
         }
-        // public override Task<OtherBooksBorrowedByUserWhoBorrowedThisBook> GetOtherBooksBorrowedByUserWhoBorrowedThisBook(OtherBooksBorrowedByUserWhoBorrowedThisBookRequest request, ServerCallContext context)
-        // {
-        //     return base.GetOtherBooksBorrowedByUserWhoBorrowedThisBook(request, context);
-        // }
+        public override async Task<OtherBooksBorrowedByUsers> GetOtherBooksBorrowedByUserWhoBorrowedThisBook(OtherBooksBorrowedByUserWhoBorrowedThisBookRequest request, ServerCallContext context)
+        {
+            //fetch the borrowed books list for a specific book Id
+            var borrowedBooks = _db.GetCollection<UserBorrowedBook>("BorrowedBooks");
+            var filter = await borrowedBooks
+              .FindAsync(b => b.BookId == request.BookId);
+            var borrowedBooksList = await filter.ToListAsync();
+
+            //fetch the userIds of the users who borrowed that book with book Id
+            var userIds = borrowedBooksList.Select(b => b.UserId).Distinct().ToList();
+
+            //fetch users who borrowed this specific book with bookId in the request
+            var userCollection = _db.GetCollection<User>("Users");
+            var usersData = userCollection.Find(u => userIds.Contains(u.Id));
+            var booksCollection = _db.GetCollection<Book>("Books");
+            var borrowedBooksDetailList = new List<BorrowedBookDetail>();
+            OtherBooksBorrowedByUsers otherBooks = new();
+            foreach (var user in await usersData.ToListAsync())
+            {
+
+                var userBorrowedBooks = await (borrowedBooks.FindAsync(b => b.UserId == user.Id));
+                foreach (var userBorrowedBook in await userBorrowedBooks.ToListAsync())
+                {
+                    var book = await booksCollection.Find(b => b.Id == userBorrowedBook.BookId).FirstOrDefaultAsync();
+                    BorrowedBookDetail borrowedBookDetail = new()
+                    {
+                        BookId = userBorrowedBook.BookId,
+                        BorrowDate = Timestamp.FromDateTime(userBorrowedBook.BorrowDate),
+                        ReturnDate = userBorrowedBook.ReturnDate is not null ?
+                            Timestamp.FromDateTime(userBorrowedBook.ReturnDate.Value) : null,
+                        BookName = book.Title,
+                        DueDate = Timestamp.FromDateTime(userBorrowedBook.DueDate)
+                    };
+                    borrowedBooksDetailList.Add(borrowedBookDetail);
+                }
+                OtherBooksBorrowedByUser otherBook = new()
+                {
+                    User = user,
+                    BorrowedBooksDetailList = { borrowedBooksDetailList }
+                };
+                otherBooks.OtherBooksBorrowedByUsers_.Add(otherBook);
+            }
+            return otherBooks;
+        }
         // public override Task<BooksBorrowedByUsersWithinTimeFrame> GetUsersBorrowedBooksWithinTimeFrame(BooksBorrowedByUsersWithinTimeFrameRequest request, ServerCallContext context)
         // {
         //     return base.GetUsersBorrowedBooksWithinTimeFrame(request, context);
