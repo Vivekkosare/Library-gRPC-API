@@ -16,7 +16,7 @@ service LibraryService{
         returns (UserBorrowedBooks);
     rpc GetOtherBooksBorrowedByUserWhoBorrowedThisBook(OtherBooksBorrowedByUserWhoBorrowedThisBookRequest)
         returns (OtherBooksBorrowedByUsers);
-    rpc GetBookReadingRate(BookReadingRateRequest) returns (BookReadingRate);    
+    rpc GetBookReadingRate(BookReadingRateRequest) returns (UserBorrowReadingRates);    
 }
 
 message Book{
@@ -25,7 +25,8 @@ message Book{
     string author = 3;
     string genre = 4;
     int32 publication_year = 5;
-    int32 total_copies = 6;
+    int32 no_of_pages = 6;
+    int32 total_copies = 7;
 }
 
 message BookId {
@@ -112,6 +113,11 @@ message OtherBooksBorrowedByUserWhoBorrowedThisBookRequest{
 
 message OtherBooksBorrowedByUser{
     User user = 1;
+    repeated BookBorrowHistory borrowed_books = 2;
+}
+
+message BookBorrowHistory{
+    Book book = 1;
     repeated BorrowedBookDetail borrowed_books_detail_list = 2;
 }
 
@@ -119,21 +125,27 @@ message OtherBooksBorrowedByUsers{
     repeated OtherBooksBorrowedByUser other_books_borrowed_by_users = 1;
 }
 
-message BookReadingRateRequest{
-    string book_id = 1;
-    google.protobuf.Timestamp start_time = 2;
-    google.protobuf.Timestamp end_time = 3;
-}
-
-message BookReadingRate{
-    string book_id = 1;
-    int32 reading_rate = 2;
-}
-
 message BorrowedBookDetail{
-    string book_id = 1;
-    string book_name = 2;
+    // string book_id = 1;
+    // string book_name = 2;
+    string user_id = 1;
     google.protobuf.Timestamp borrow_date = 3;
     google.protobuf.Timestamp return_date = 4;
     google.protobuf.Timestamp due_date = 5;
+}
+
+message BookReadingRateRequest{
+    string book_id = 1;
+}
+
+message BookReadingRate{
+    string user_id = 2;
+    int32 reading_rate = 3;
+    google.protobuf.Timestamp borrow_date = 4;
+    google.protobuf.Timestamp return_date = 5;
+}
+
+message UserBorrowReadingRates{
+    Book book = 1;
+    repeated BookReadingRate book_reading_rates = 2;
 }

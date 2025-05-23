@@ -1,60 +1,121 @@
+using System.Collections.Concurrent;
+using System.Collections.Frozen;
+using System.Linq;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using LibraryAPI.Extensions;
 using LibraryAPI.Models;
 using LibraryAPI.Protos;
 using MongoDB.Driver;
 
 namespace LibraryAPI.Services
 {
-    public class LibraryService(IMongoDatabase _db) : LibraryAPI.Protos.LibraryService.LibraryServiceBase
+    public class LibraryService(IMongoDatabase _db,
+    ILogger<LibraryService> _logger) : LibraryAPI.Protos.LibraryService.LibraryServiceBase
     {
         public override async Task<BookList> GetAllBooks(Empty request, ServerCallContext context)
         {
             var booksCollection = _db.GetCollection<Book>("Books");
-            var cursor = await booksCollection.FindAsync(FilterDefinition<Book>.Empty);
-            var books = await cursor.ToListAsync();
+            var books = await booksCollection.Find(FilterDefinition<Book>.Empty).ToListAsync();
             var bookList = new BookList();
-            foreach (var book in books)
-            {
-                bookList.Books.Add(book);
-            }
+            bookList.Books.AddRange(books);
             return bookList;
         }
-        // public override Task<Book> GetBookById(BookId request, ServerCallContext context)
-        // {
-        //     return base.GetBookById(request, context);
-        // }
         public override async Task<BookCopiesStatus> GetBookCopiesStatus(BookCopiesRequest request, ServerCallContext context)
         {
-            var book = await _db.GetCollection<Book>("Books")
+            try
+            {
+                var book = await _db.GetCollection<Book>("Books")
                         .Find(b => b.Id == request.BookId).FirstOrDefaultAsync();
-            if (book is null)
-            {
-                throw new RpcException(new Status(StatusCode.NotFound, $"Book not found for the given ID: {request.BookId}"));
-            }
-            var booksBorrowed = await _db.GetCollection<BorrowedBook>("BorrowedBooks")
-                            .Aggregate()
-                            .Match(b => b.BookId == request.BookId)
-                            .Group(b => b.BookId, g => new
-                            {
-                                BorrowedCount = g.Count()
-                            })
-                            .FirstOrDefaultAsync();
-            var borrowedCopies = booksBorrowed?.BorrowedCount ?? 0;
-            var availableCopies = book.TotalCopies - borrowedCopies;
+                if (book is null)
+                {
+                    _logger.LogError($"Book not found for the given ID: {request.BookId}");
+                    throw new RpcException(new Status(StatusCode.NotFound, $"Book not found for the given ID: {request.BookId}"));
+                }
+                var booksBorrowed = await _db.GetCollection<BorrowedBook>("BorrowedBooks")
+                                .Aggregate()
+                                .Match(b => b.BookId == request.BookId)
+                                .Group(b => b.BookId, g => new
+                                {
+                                    BorrowedCount = g.Count()
+                                })
+                                .FirstOrDefaultAsync();
+                var borrowedCopies = booksBorrowed?.BorrowedCount ?? 0;
+                var availableCopies = book.TotalCopies - borrowedCopies;
 
-            return new BookCopiesStatus
+                return new BookCopiesStatus
+                {
+                    BookId = request.BookId,
+                    TotalCopies = book.TotalCopies,
+                    BorrowedCopies = borrowedCopies,
+                    AvailableCopies = availableCopies
+                };
+            }
+            catch (System.Exception ex)
             {
-                BookId = request.BookId,
-                TotalCopies = book.TotalCopies,
-                BorrowedCopies = borrowedCopies,
-                AvailableCopies = availableCopies
-            };
+                _logger.LogError($"Error: {ex.Message}");
+                throw;
+            }
+
         }
-        // public override Task<BookReadingRate> GetBookReadingRate(BookResadingRateRequest request, ServerCallContext context)
-        // {
-        //     return base.GetBookReadingRate(request, context);
-        // }
+        public override async Task<UserBorrowReadingRates> GetBookReadingRate(BookReadingRateRequest request, ServerCallContext context)
+        {
+            try
+            {
+
+                var book = await _db.GetCollection<Book>("Books")
+                            .Find(b => b.Id == request.BookId).FirstOrDefaultAsync();
+                if (book is null)
+                {
+                    _logger.LogError($"Book not found for the given ID: {request.BookId}");
+                    throw new RpcException(new Status(StatusCode.NotFound, $"Book not found for the given ID: {request.BookId}"));
+                }
+
+                // Get all borrowed books for the given bookId where user returned the book
+                var booksBorrowedAndReturned = await _db.GetCollection<BorrowedBookEntity>("BorrowedBooks")
+                                .Find(b => b.BookId == request.BookId && b.ReturnDate != null)
+                                .ToListAsync();
+
+                //Group the borrowed books by userId
+                var borrowRecordsByUser = booksBorrowedAndReturned
+                                .GroupBy(b => new { b.UserId });
+
+                List<BookReadingRate> bookReadingRates = new();
+
+                foreach (var record in borrowRecordsByUser)
+                {
+                    foreach (var bookBorrowed in record)
+                    {
+                        int totalDays = 0;
+                        // Calculate the total days between borrow date and return date
+                        if (bookBorrowed.ReturnDate.HasValue)
+                        {
+                            totalDays = (int)(bookBorrowed.ReturnDate.Value - bookBorrowed.BorrowDate).TotalDays;
+                        }
+                        var bookReadingRate = new BookReadingRate
+                        {
+                            UserId = bookBorrowed.UserId,
+                            ReadingRate = book.NoOfPages / totalDays,
+                            BorrowDate = Timestamp.FromDateTime(bookBorrowed.BorrowDate),
+                            ReturnDate = bookBorrowed.ReturnDate != null ? Timestamp.FromDateTime(bookBorrowed.ReturnDate.Value) : null,
+                        };
+                        bookReadingRates.Add(bookReadingRate);
+                    }
+                }
+                ;
+                return new UserBorrowReadingRates
+                {
+                    Book = book,
+                    BookReadingRates = { bookReadingRates }
+                };
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                throw;
+            }
+
+        }
         public override async Task<UserBorrowedBooks> GetBooksBorrowedByUserWithinTimeFrame(UserBorrowedBooksWithinTimeFrameRequest request, ServerCallContext context)
         {
             try
@@ -62,6 +123,22 @@ namespace LibraryAPI.Services
                 var startTime = request.StartTime.ToDateTime();
                 var endTime = request.EndTime.ToDateTime();
                 var userId = request.UserId;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _logger.LogError($"User ID is null or empty");
+                    throw new RpcException(new Status(StatusCode.InvalidArgument, "User ID is null or empty"));
+                }
+                if (startTime == default || endTime == default)
+                {
+                    _logger.LogError($"Start time or end time is not valid");
+                    throw new RpcException(new Status(StatusCode.InvalidArgument, "Start time or end time is not valid"));
+                }
+                if (startTime > endTime)
+                {
+                    _logger.LogError($"Start time cannot be greater than end time");
+                    throw new RpcException(new Status(StatusCode.InvalidArgument, "Start time cannot be greater than end time"));
+                }
+
                 var borrowedBooks = _db.GetCollection<UserBorrowedBook>("BorrowedBooks");
                 var filter = Builders<UserBorrowedBook>.Filter.And(
                     Builders<UserBorrowedBook>.Filter.Eq(b => b.UserId, userId),
@@ -71,20 +148,26 @@ namespace LibraryAPI.Services
                 var userBorrowedBooks = await borrowedBooks
                     .Find(filter).ToListAsync();
 
-                var books = new HashSet<Book>();
-                var booksCollection = _db.GetCollection<Book>("Books");
-                foreach (var borrowedBook in userBorrowedBooks)
+                if (userBorrowedBooks.Count == 0)
                 {
-                    var book = await booksCollection.Find(b => b.Id == borrowedBook.BookId).FirstOrDefaultAsync();
-                    if (book != null)
-                    {
-                        books.Add(book);
-                    }
+                    _logger.LogError($"No borrowed books found for the given user ID: {userId}");
+                    throw new RpcException(new Status(StatusCode.NotFound, $"No borrowed books found for the given user ID: {userId}"));
                 }
+
+                var booksSet = new HashSet<Book>();
+                var booksCollection = _db.GetCollection<Book>("Books");
+
+                // Get all books with details borrowed by the user within the time frame
+                var books = await booksCollection
+                    .Find(b => userBorrowedBooks.Select(bb => bb.BookId).Contains(b.Id))
+                    .ToListAsync();
+
+                var distinctBooks = books.Distinct().ToList();
+
                 return new UserBorrowedBooks
                 {
                     UserId = userId,
-                    Books = { books },
+                    Books = { distinctBooks },
                     BorrowedBooksCount = books.Count,
                     StartTime = Timestamp.FromDateTime(startTime),
                     EndTime = Timestamp.FromDateTime(endTime)
@@ -93,108 +176,188 @@ namespace LibraryAPI.Services
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                _logger.LogError($"Error: {ex.Message}");
                 throw;
             }
 
         }
         public override async Task<MostBorrowedBooks> GetMostBorrowedBooks(TimeRangeRequest request, ServerCallContext context)
         {
-            //fetch borrowed books, books and users collections
-            var borrowedBooks = _db.GetCollection<UserBorrowedBook>("BorrowedBooks");
-            var bookCollection = _db.GetCollection<Book>("Books");
-            var usersCollection = _db.GetCollection<User>("Users");
-
-
-            var filter = Builders<UserBorrowedBook>.Filter.Empty;
-            // Check if the request has a start time and end time
-            if (request.StartTime is not null && request.EndTime is not null)
+            try
             {
-                filter = Builders<UserBorrowedBook>.Filter.And(
-                        Builders<UserBorrowedBook>.Filter.Gte(b => b.BorrowDate, request.StartTime.ToDateTime()),
-                        Builders<UserBorrowedBook>.Filter.Lte(b => b.BorrowDate, request.EndTime.ToDateTime()));
-            }
+                //fetch borrowed books, books and users collections
+                var borrowedBooks = _db.GetCollection<UserBorrowedBook>("BorrowedBooks");
+                var bookCollection = _db.GetCollection<Book>("Books");
+                var usersCollection = _db.GetCollection<User>("Users");
 
-            // get aggregate by grouping by bookId and fetching the borrow count along with the users who borrowed the book
-            var aggregate = await borrowedBooks.Aggregate()
-                    .Match(filter)
-                    .Group(b => b.BookId, g => new
-                    {
-                        BookId = g.Key,
-                        // BorrowCount = g.Sum(b => 1)
-                        BorrowCount = g.Count(),
-                        Users = g.Select(b => b.UserId).Distinct().ToList()
-                    })
-                    .SortByDescending(g => g.BorrowCount)
-                    .ToListAsync();
 
-            var mostBorrowedBooks = new MostBorrowedBooks();
-
-            // iterate through the aggregate result and fetch the book details and users who borrowed the book
-            foreach (var book in aggregate)
-            {
-                var bookDetails = await bookCollection.Find(b => b.Id == book.BookId).FirstOrDefaultAsync();
-                var users = await usersCollection.Find(u => book.Users.Contains(u.Id)).ToListAsync();
-                if (bookDetails is not null && users is not null)
+                var filter = Builders<UserBorrowedBook>.Filter.Empty;
+                // Check if the request has a start time and end time
+                if (request.StartTime is not null && request.EndTime is not null)
                 {
-                    var mostBorrowedBook = new MostBorrowedBook
-                    {
-                        Book = bookDetails,
-                        BorrowCount = book.BorrowCount
-                    };
-                    mostBorrowedBook.Users.AddRange(users);
-                    mostBorrowedBooks.MostBorrowedBooks_.Add(mostBorrowedBook);
+                    filter = Builders<UserBorrowedBook>.Filter.And(
+                            Builders<UserBorrowedBook>.Filter.Gte(b => b.BorrowDate, request.StartTime.ToDateTime()),
+                            Builders<UserBorrowedBook>.Filter.Lte(b => b.BorrowDate, request.EndTime.ToDateTime()));
                 }
+
+                // get aggregate by grouping by bookId and fetching the borrow count along with the users who borrowed the book
+                var aggregate = await borrowedBooks.Aggregate()
+                        .Match(filter)
+                        .Group(b => b.BookId, g => new
+                        {
+                            BookId = g.Key,
+                            // BorrowCount = g.Sum(b => 1)
+                            BorrowCount = g.Count(),
+                            Users = g.Select(b => b.UserId).Distinct().ToList()
+                        })
+                        .SortByDescending(g => g.BorrowCount)
+                        .ToListAsync();
+
+                var mostBorrowedBooks = new MostBorrowedBooks();
+
+                var bookIds = aggregate.Select(b => b.BookId).ToList();
+                var books = await bookCollection
+                    .Find(b => bookIds.Contains(b.Id))
+                    .ToListAsync();
+                var bookDict = books.ToFrozenDictionary(b => b.Id);
+
+                var userIds = aggregate.SelectMany(b => b.Users).Distinct().ToList();
+                var usersThoseBorrowedBooks = await usersCollection
+                    .Find(u => userIds.Contains(u.Id))
+                    .ToListAsync();
+                var userDict = usersThoseBorrowedBooks.ToFrozenDictionary(u => u.Id);
+
+                // iterate through the aggregate result and fetch the book details and users who borrowed the book
+                foreach (var agr in aggregate)
+                {
+                    var bookDetails = bookDict.TryGetValue(agr.BookId, out var bookDetail) ? bookDetail : null;
+                    if (bookDetails is null)
+                        continue;
+
+                    var userSet = new HashSet<string>(agr.Users);
+                    var users = userDict.Where(u => userSet.Contains(u.Key)).Select(u => u.Value).ToList();
+
+                    if (users.Count > 0)
+                    {
+                        var mostBorrowedBook = new MostBorrowedBook
+                        {
+                            Book = bookDetails,
+                            BorrowCount = agr.BorrowCount
+                        };
+                        mostBorrowedBook.Users.AddRange(users);
+                        mostBorrowedBooks.MostBorrowedBooks_.Add(mostBorrowedBook);
+                    }
+                }
+                return mostBorrowedBooks;
             }
-            return mostBorrowedBooks;
+            catch (System.Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                throw;
+            }
+
         }
         public override async Task<OtherBooksBorrowedByUsers> GetOtherBooksBorrowedByUserWhoBorrowedThisBook(OtherBooksBorrowedByUserWhoBorrowedThisBookRequest request, ServerCallContext context)
         {
-            //fetch the borrowed books list for a specific book Id
-            var borrowedBooks = _db.GetCollection<UserBorrowedBook>("BorrowedBooks");
-            var filter = await borrowedBooks
-              .FindAsync(b => b.BookId == request.BookId);
-            var borrowedBooksList = await filter.ToListAsync();
-
-            //fetch the userIds of the users who borrowed that book with book Id
-            var userIds = borrowedBooksList.Select(b => b.UserId).Distinct().ToList();
-
-            //fetch users who borrowed this specific book with bookId in the request
-            var userCollection = _db.GetCollection<User>("Users");
-            var usersData = userCollection.Find(u => userIds.Contains(u.Id));
-            var booksCollection = _db.GetCollection<Book>("Books");
-            var borrowedBooksDetailList = new List<BorrowedBookDetail>();
-            OtherBooksBorrowedByUsers otherBooks = new();
-            foreach (var user in await usersData.ToListAsync())
+            try
             {
+                var borrowedBooks = _db.GetCollection<UserBorrowedBook>("BorrowedBooks");
+                var userCollection = _db.GetCollection<User>("Users");
+                var booksCollection = _db.GetCollection<Book>("Books");
 
-                var userBorrowedBooks = await (borrowedBooks.FindAsync(b => b.UserId == user.Id));
-                foreach (var userBorrowedBook in await userBorrowedBooks.ToListAsync())
+                // Get all userIds who borrowed the given book
+                var userIds = await borrowedBooks
+                    .DistinctAsync<string>("UserId", Builders<UserBorrowedBook>.Filter.Eq(b => b.BookId, request.BookId))
+                    .Result
+                    .ToListAsync();
+
+                // Get all users from the user collection
+                // who borrowed the given book
+                var users = await userCollection
+                    .Find(u => userIds.Contains(u.Id))
+                    .ToListAsync();
+                FrozenDictionary<string, User> userDict = users.ToFrozenDictionary(u => u.Id);
+
+                // Get all books in books collection excluding the original bookId
+                var books = await booksCollection
+                    .Find(b => b.Id != request.BookId)
+                    .ToListAsync();
+                FrozenDictionary<string, Book> booksDict = books.ToFrozenDictionary(b => b.Id);
+
+                // Get all books borrowed by these users, excluding the original bookId
+                var allUsersBorrowedBooks = await borrowedBooks
+                    .Find(bb => userIds.Contains(bb.UserId) && bb.BookId != request.BookId)
+                    .ToListAsync();
+
+
+                var response = new OtherBooksBorrowedByUsers();
+                var resultBag = new ConcurrentBag<OtherBooksBorrowedByUser>();
+
+
+                Parallel.ForEach(userIds, userId =>
                 {
-                    var book = await booksCollection.Find(b => b.Id == userBorrowedBook.BookId).FirstOrDefaultAsync();
-                    BorrowedBookDetail borrowedBookDetail = new()
+                    if (!userDict.TryGetValue(userId, out var user) || user == null)
+                        return;
+
+                    // Get all books borrowed by this user
+                    var userBorrowedBooks = allUsersBorrowedBooks
+                        .Where(bb => bb.UserId == userId);
+
+                    // Group by BookId
+                    var grouped = userBorrowedBooks.GroupBy(b => b.BookId);
+                    var borrowHistoryList = new List<BookBorrowHistory>();
+
+                    foreach (var group in grouped)
                     {
-                        BookId = userBorrowedBook.BookId,
-                        BorrowDate = Timestamp.FromDateTime(userBorrowedBook.BorrowDate),
-                        ReturnDate = userBorrowedBook.ReturnDate is not null ?
-                            Timestamp.FromDateTime(userBorrowedBook.ReturnDate.Value) : null,
-                        BookName = book.Title,
-                        DueDate = Timestamp.FromDateTime(userBorrowedBook.DueDate)
+                        if (!booksDict.TryGetValue(group.Key, out var book) || book == null)
+                            return;
+
+                        var details = group.Select(b => new BorrowedBookDetail
+                        {
+                            UserId = b.UserId,
+                            BorrowDate = Timestamp.FromDateTime(b.BorrowDate),
+                            ReturnDate = b.ReturnDate != null ? Timestamp.FromDateTime(b.ReturnDate.Value) : null,
+                            DueDate = Timestamp.FromDateTime(b.DueDate)
+                        }).ToList();
+
+                        if (details.Count > 0)
+                        {
+                            var borrowHistory = new BookBorrowHistory
+                            {
+                                Book = book,
+                                BorrowedBooksDetailList
+                                 = { details }
+
+                            };
+                            borrowHistoryList.Add(borrowHistory);
+                        }
+                    }
+
+                    if (borrowHistoryList.Count == 0)
+                        return;
+                    var otherBook = new OtherBooksBorrowedByUser
+                    {
+                        User = user,
+                        BorrowedBooks = { borrowHistoryList }
                     };
-                    borrowedBooksDetailList.Add(borrowedBookDetail);
-                }
-                OtherBooksBorrowedByUser otherBook = new()
-                {
-                    User = user,
-                    BorrowedBooksDetailList = { borrowedBooksDetailList }
-                };
-                otherBooks.OtherBooksBorrowedByUsers_.Add(otherBook);
+                    resultBag.Add(otherBook);
+                });
+
+                response.OtherBooksBorrowedByUsers_.AddRange(resultBag);
+                return response;
             }
-            return otherBooks;
+
+            catch (System.Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+
         }
-        // public override Task<BooksBorrowedByUsersWithinTimeFrame> GetUsersBorrowedBooksWithinTimeFrame(BooksBorrowedByUsersWithinTimeFrameRequest request, ServerCallContext context)
-        // {
-        //     return base.GetUsersBorrowedBooksWithinTimeFrame(request, context);
-        // }
+
     }
+    // public override Task<BooksBorrowedByUsersWithinTimeFrame> GetUsersBorrowedBooksWithinTimeFrame(BooksBorrowedByUsersWithinTimeFrameRequest request, ServerCallContext context)
+    // {
+    //     return base.GetUsersBorrowedBooksWithinTimeFrame(request, context);
+    // }
 }
