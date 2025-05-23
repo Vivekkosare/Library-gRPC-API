@@ -1,0 +1,12 @@
+bin/Debug/net9.0/LibraryAPI.dll
+bin/Debug/net9.0/LibraryAPI.pdb
+obj/Debug/net9.0/LibraryAPI.AssemblyInfo.cs
+obj/Debug/net9.0/LibraryAPI.AssemblyInfoInputs.cache
+obj/Debug/net9.0/LibraryAPI.csproj.CoreCompileInputs.cache
+obj/Debug/net9.0/LibraryAPI.dll
+obj/Debug/net9.0/LibraryAPI.pdb
+obj/Debug/net9.0/LibraryAPI.sourcelink.json
+obj/Debug/net9.0/Protos/Library.cs
+obj/Debug/net9.0/Protos/LibraryGrpc.cs
+obj/Debug/net9.0/ref/LibraryAPI.dll
+obj/Debug/net9.0/refint/LibraryAPI.dll
