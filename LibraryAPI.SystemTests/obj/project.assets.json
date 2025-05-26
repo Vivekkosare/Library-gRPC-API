@@ -2721,7 +2721,7 @@
           "lib/net7.0/ZstdSharp.dll": {}
         }
       },
-      "LibraryAPI/1.0.0": {
+      "Library-gRPC-API/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
@@ -2732,10 +2732,10 @@
           "MongoDB.Driver": "3.4.0"
         },
         "compile": {
-          "bin/placeholder/LibraryAPI.dll": {}
+          "bin/placeholder/Library-gRPC-API.dll": {}
         },
         "runtime": {
-          "bin/placeholder/LibraryAPI.dll": {}
+          "bin/placeholder/Library-gRPC-API.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
@@ -8045,16 +8045,16 @@
         "zstdsharp.port.nuspec"
       ]
     },
-    "LibraryAPI/1.0.0": {
+    "Library-gRPC-API/1.0.0": {
       "type": "project",
-      "path": "../LibraryAPI/LibraryAPI.csproj",
-      "msbuildProject": "../LibraryAPI/LibraryAPI.csproj"
+      "path": "../Library-gRPC-API/Library-gRPC-API.csproj",
+      "msbuildProject": "../Library-gRPC-API/Library-gRPC-API.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
       "Grpc.Net.Client >= 2.64.0",
-      "LibraryAPI >= 1.0.0",
+      "Library-gRPC-API >= 1.0.0",
       "Microsoft.AspNetCore.Mvc.Testing >= 9.0.0",
       "Microsoft.NET.Test.Sdk >= 17.8.0",
       "MongoDB.Driver >= 3.4.0",
@@ -8089,8 +8089,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
-              "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj"
+            "/Users/vivekkosare/Development/LibraryAPI/Library-gRPC-API/Library-gRPC-API.csproj": {
+              "projectPath": "/Users/vivekkosare/Development/LibraryAPI/Library-gRPC-API/Library-gRPC-API.csproj"
             }
           }
         }

@@ -1,14 +1,9 @@
-using System;
-using System.Threading.Tasks;
 using Grpc.Core;
-using LibraryAPI.Models;
-using LibraryAPI.Protos;
-using LibraryAPI.Services;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using Xunit;
 using Google.Protobuf.WellKnownTypes;
-using System.Collections.Generic;
+using LibrarygRPCAPI.Protos;
+using Library_gRPC_API.Models;
 
 namespace LibraryAPI.IntegrationTests;
 
@@ -39,8 +34,8 @@ public class UserBorrowedBooksWithinTimeFrame_IntegrationTests
         };
         await borrowedBooksCollection.InsertOneAsync(borrowedBook);
 
-        var logger = new LoggerFactory().CreateLogger<LibraryAPI.Services.LibraryService>();
-        var service = new LibraryAPI.Services.LibraryService(db, logger);
+        var logger = new LoggerFactory().CreateLogger<Library_gRPC_API.Services.UserLibraryService>();
+        var service = new Library_gRPC_API.Services.UserLibraryService(db, logger);
         var request = new UserBorrowedBooksWithinTimeFrameRequest
         {
             UserId = "user1",

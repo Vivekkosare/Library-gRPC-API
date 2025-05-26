@@ -10,7 +10,7 @@
         "dependencies": {
           "Google.Protobuf": "3.31.0",
           "Grpc.Core": "2.46.6",
-          "LibraryAPI": "1.0.0",
+          "Library-gRPC-API": "1.0.0",
           "Microsoft.Extensions.Logging": "9.0.5",
           "Microsoft.NET.Test.Sdk": "17.14.0",
           "MongoDB.Driver": "3.4.0",
@@ -621,7 +621,7 @@
           }
         }
       },
-      "LibraryAPI/1.0.0": {
+      "Library-gRPC-API/1.0.0": {
         "dependencies": {
           "Google.Protobuf": "3.31.0",
           "Grpc.AspNetCore": "2.64.0",
@@ -630,7 +630,7 @@
           "MongoDB.Driver": "3.4.0"
         },
         "runtime": {
-          "LibraryAPI.dll": {
+          "Library-gRPC-API.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -959,7 +959,7 @@
       "path": "zstdsharp.port/0.7.3",
       "hashPath": "zstdsharp.port.0.7.3.nupkg.sha512"
     },
-    "LibraryAPI/1.0.0": {
+    "Library-gRPC-API/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

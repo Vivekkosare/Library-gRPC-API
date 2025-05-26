@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc.Testing;
-using LibraryAPI.Protos;
 using Grpc.Net.Client;
 using MongoDB.Driver;
 using Microsoft.Extensions.DependencyInjection;
-using LibraryAPI.Models;
 using Xunit;
+using LibrarygRPCAPI.Protos;
+using Library_gRPC_API.Models;
 
 namespace LibraryAPI.SystemTests
 {

@@ -23,7 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryAPI\LibraryAPI.csproj" />
+<ProjectReference Include="..\Library-gRPC-API\Library-gRPC-API.csproj" />
+
   </ItemGroup>
 
 </Project>

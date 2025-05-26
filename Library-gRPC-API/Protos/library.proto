@@ -1,0 +1,151 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "LibrarygRPCAPI.Protos";
+package library;
+
+service LibraryService{
+    rpc GetAllBooks(google.protobuf.Empty) returns (BookList);
+    rpc GetBookById(BookId) returns (Book);
+    rpc GetMostBorrowedBooks(TimeRangeRequest) returns (MostBorrowedBooks);
+    rpc GetBookCopiesStatus(BookCopiesRequest) returns (BookCopiesStatus);
+    rpc GetUsersBorrowedBooksWithinTimeFrame(BooksBorrowedByUsersWithinTimeFrameRequest) 
+        returns (BooksBorrowedByUsersWithinTimeFrame);
+    rpc GetBooksBorrowedByUserWithinTimeFrame(UserBorrowedBooksWithinTimeFrameRequest)
+        returns (UserBorrowedBooks);
+    rpc GetOtherBooksBorrowedByUserWhoBorrowedThisBook(OtherBooksBorrowedByUserWhoBorrowedThisBookRequest)
+        returns (OtherBooksBorrowedByUsers);
+    rpc GetBookReadingRate(BookReadingRateRequest) returns (UserBorrowReadingRates);    
+}
+
+message Book{
+    string id = 1;
+    string title = 2;
+    string author = 3;
+    string genre = 4;
+    int32 publication_year = 5;
+    int32 no_of_pages = 6;
+    int32 total_copies = 7;
+}
+
+message BookId {
+    string id = 1;
+}
+
+message BookList{
+    repeated Book books = 1;
+}
+
+message User{
+    string id = 1;
+    string name = 2;
+    string email = 3;
+}
+
+message TimeRangeRequest{
+    google.protobuf.Timestamp start_time = 1;
+    google.protobuf.Timestamp end_time = 2;
+}
+
+message BorrowedBook{
+    string id = 1;
+    string book_id = 2;
+    string user_id = 3;
+    google.protobuf.Timestamp borrow_date = 4;
+    google.protobuf.Timestamp return_date = 5;
+    google.protobuf.Timestamp due_date = 6;
+}
+
+message MostBorrowedBook{
+    Book book = 1;
+    repeated User users = 2;
+    int32 borrow_count = 3;
+}
+message MostBorrowedBooks{
+    repeated MostBorrowedBook most_borrowed_books = 1;
+}
+
+message BookStatus{
+    string id = 1;
+    string borrow_book_id = 2;
+    string status = 3;
+}
+message BookCopiesStatus{
+    string book_id = 1;
+    int32 total_copies = 2;
+    int32 available_copies = 3;
+    int32 borrowed_copies = 4;
+}
+
+message BookCopiesRequest{
+    string book_id = 1;
+}
+
+message BooksBorrowedByUsersWithinTimeFrameRequest{
+    google.protobuf.Timestamp start_time = 1;
+    google.protobuf.Timestamp end_time = 2;
+}
+
+message UserBorrowedBooks{
+    string user_id = 1;
+    int32 borrowed_books_count = 2;
+    repeated Book books = 3;
+    google.protobuf.Timestamp start_time = 4;
+    google.protobuf.Timestamp end_time = 5;
+}
+
+message BooksBorrowedByUsersWithinTimeFrame{
+    google.protobuf.Timestamp start_time = 1;
+    google.protobuf.Timestamp end_time = 2;
+    repeated UserBorrowedBooks users_borrowed_books = 3;
+}
+
+message UserBorrowedBooksWithinTimeFrameRequest{
+    string user_id = 1;
+    google.protobuf.Timestamp start_time = 2;
+    google.protobuf.Timestamp end_time = 3;    
+}
+
+message OtherBooksBorrowedByUserWhoBorrowedThisBookRequest{
+    string book_id = 1;
+}
+
+message OtherBooksBorrowedByUser{
+    User user = 1;
+    repeated BookBorrowHistory borrowed_books = 2;
+}
+
+message BookBorrowHistory{
+    Book book = 1;
+    repeated BorrowedBookDetail borrowed_books_detail_list = 2;
+}
+
+message OtherBooksBorrowedByUsers{
+    repeated OtherBooksBorrowedByUser other_books_borrowed_by_users = 1;
+}
+
+message BorrowedBookDetail{
+    // string book_id = 1;
+    // string book_name = 2;
+    string user_id = 1;
+    google.protobuf.Timestamp borrow_date = 3;
+    google.protobuf.Timestamp return_date = 4;
+    google.protobuf.Timestamp due_date = 5;
+}
+
+message BookReadingRateRequest{
+    string book_id = 1;
+}
+
+message BookReadingRate{
+    string user_id = 2;
+    int32 reading_rate = 3;
+    google.protobuf.Timestamp borrow_date = 4;
+    google.protobuf.Timestamp return_date = 5;
+}
+
+message UserBorrowReadingRates{
+    Book book = 1;
+    repeated BookReadingRate book_reading_rates = 2;
+}

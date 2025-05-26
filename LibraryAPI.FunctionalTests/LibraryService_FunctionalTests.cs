@@ -1,11 +1,10 @@
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using MongoDB.Driver;
 using Mongo2Go;
 using Microsoft.Extensions.DependencyInjection;
-using static LibraryAPI.Protos.LibraryService;
-using LibraryAPI.Protos;
+using LibrarygRPCAPI.Protos;
+using Library_gRPC_API.Models;
 
 namespace LibraryAPI.FunctionalTests;
 
@@ -47,8 +46,8 @@ public class LibraryService_FunctionalTests : IClassFixture<WebApplicationFactor
             TotalCopies = 5
         });
 
-        var borrowedBooksCollection = _testDb.GetCollection<LibraryAPI.Models.UserBorrowedBook>("BorrowedBooks");
-        await borrowedBooksCollection.InsertOneAsync(new LibraryAPI.Models.UserBorrowedBook
+        var borrowedBooksCollection = _testDb.GetCollection<UserBorrowedBook>("BorrowedBooks");
+        await borrowedBooksCollection.InsertOneAsync(new UserBorrowedBook
         {
             Id = "borrow1",
             BookId = "book1",
@@ -68,11 +67,11 @@ public class LibraryService_FunctionalTests : IClassFixture<WebApplicationFactor
     public async Task GetBookCopiesStatus_ReturnsCorrectStatus()
     {
         // Arrange
-        var client = new LibraryServiceClient(_channel);
-        
+        var client = new LibrarygRPCAPI.Protos.LibraryService.LibraryServiceClient(_channel);
+
 
         // Act
-        var response = await client.GetBookCopiesStatusAsync(new LibraryAPI.Protos.BookCopiesRequest { BookId = "book1" });
+        var response = await client.GetBookCopiesStatusAsync(new BookCopiesRequest { BookId = "book1" });
 
         // Assert
         Assert.Equal("book1", response.BookId);

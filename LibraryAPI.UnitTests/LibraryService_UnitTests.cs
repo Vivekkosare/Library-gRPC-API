@@ -1,10 +1,5 @@
-using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
-using LibraryAPI.Extensions;
-using LibraryAPI.Models;
-using LibraryAPI.Protos;
-using LibraryAPI.Services;
-using Microsoft.Extensions.Logging;
+using Library_gRPC_API.Models;
+using LibrarygRPCAPI.Protos;
 using MongoDB.Driver;
 using Moq;
 
@@ -55,7 +50,7 @@ public class LibraryService_UnitTests(LibraryServiceFixture _fixture) : IClassFi
             .ReturnsAsync(borrowedBooksCursor);
         mockDb.Setup(x => x.GetCollection<BorrowedBookEntity>("BorrowedBooks", null)).Returns(mockBorrowedBooksCollection.Object);
 
-        var service = new Services.LibraryService(mockDb.Object, mockLogger.Object);
+        var service = new Library_gRPC_API.Services.UserLibraryService(mockDb.Object, mockLogger.Object);
         var request = new BookReadingRateRequest { BookId = bookId };
 
         // Act

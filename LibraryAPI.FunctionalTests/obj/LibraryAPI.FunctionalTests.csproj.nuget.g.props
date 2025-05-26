@@ -23,7 +23,7 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Pkgxunit_analyzers Condition=" '$(Pkgxunit_analyzers)' == '' ">/Users/vivekkosare/.nuget/packages/xunit.analyzers/1.15.0</Pkgxunit_analyzers>
-    <PkgMongo2Go Condition=" '$(PkgMongo2Go)' == '' ">/Users/vivekkosare/.nuget/packages/mongo2go/3.1.0</PkgMongo2Go>
+    <PkgMongo2Go Condition=" '$(PkgMongo2Go)' == '' ">/Users/vivekkosare/.nuget/packages/mongo2go/4.1.0</PkgMongo2Go>
     <PkgGrpc_Tools Condition=" '$(PkgGrpc_Tools)' == '' ">/Users/vivekkosare/.nuget/packages/grpc.tools/2.72.0</PkgGrpc_Tools>
   </PropertyGroup>
 </Project>

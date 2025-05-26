@@ -40,10 +40,10 @@
           "Google.Protobuf": "3.31.0",
           "Grpc.Net.Client": "2.71.0",
           "Grpc.Tools": "2.72.0",
-          "LibraryAPI": "1.0.0",
+          "Library-gRPC-API": "1.0.0",
           "Microsoft.AspNetCore.Mvc.Testing": "9.0.5",
           "Microsoft.NET.Test.Sdk": "17.10.0",
-          "Mongo2Go": "3.1.0",
+          "Mongo2Go": "4.1.0",
           "coverlet.collector": "6.0.2",
           "xunit": "2.9.0",
           "xunit.runner.visualstudio": "2.8.2",
@@ -291,8 +291,8 @@
           "System.Text.Encoding.CodePages": "9.0.0.0",
           "System.Text.Encoding": "9.0.0.0",
           "System.Text.Encoding.Extensions": "9.0.0.0",
-          "System.Text.Encodings.Web": "9.0.0.0",
-          "System.Text.Json": "9.0.0.0",
+          "System.Text.Encodings.Web.Reference": "9.0.0.0",
+          "System.Text.Json.Reference": "9.0.0.0",
           "System.Text.RegularExpressions": "9.0.0.0",
           "System.Threading.Channels": "9.0.0.0",
           "System.Threading": "9.0.0.0",
@@ -1260,11 +1260,16 @@
           "System.Security.Principal.Windows": "5.0.0"
         }
       },
-      "Mongo2Go/3.1.0": {
+      "Mongo2Go/4.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.5",
+          "MongoDB.Driver": "3.4.0",
+          "System.Text.Json": "6.0.10"
+        },
         "runtime": {
           "lib/netstandard2.1/Mongo2Go.dll": {
-            "assemblyVersion": "3.1.0.0",
-            "fileVersion": "3.1.0.0"
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.1.0.0"
           }
         },
         "compile": {
@@ -1274,7 +1279,7 @@
       "MongoDB.Bson/3.4.0": {
         "dependencies": {
           "System.Memory": "4.5.5",
-          "System.Runtime.CompilerServices.Unsafe": "5.0.0"
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "runtime": {
           "lib/net6.0/MongoDB.Bson.dll": {
@@ -1367,7 +1372,7 @@
       },
       "System.Memory/4.5.5": {},
       "System.Reflection.Metadata/1.6.0": {},
-      "System.Runtime.CompilerServices.Unsafe/5.0.0": {},
+      "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
       "System.Security.AccessControl/5.0.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -1375,6 +1380,17 @@
         }
       },
       "System.Security.Principal.Windows/5.0.0": {},
+      "System.Text.Encodings.Web/6.0.0": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        }
+      },
+      "System.Text.Json/6.0.10": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0",
+          "System.Text.Encodings.Web": "6.0.0"
+        }
+      },
       "xunit/2.9.0": {
         "dependencies": {
           "xunit.analyzers": "1.15.0",
@@ -1451,7 +1467,7 @@
           "lib/net7.0/ZstdSharp.dll": {}
         }
       },
-      "LibraryAPI/1.0.0": {
+      "Library-gRPC-API/1.0.0": {
         "dependencies": {
           "Google.Protobuf": "3.31.0",
           "Grpc.AspNetCore": "2.64.0",
@@ -1460,13 +1476,13 @@
           "MongoDB.Driver": "3.4.0"
         },
         "runtime": {
-          "LibraryAPI.dll": {
+          "Library-gRPC-API.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
         },
         "compile": {
-          "LibraryAPI.dll": {}
+          "Library-gRPC-API.dll": {}
         }
       },
       "Microsoft.AspNetCore.Antiforgery/9.0.0.0": {
@@ -2933,13 +2949,13 @@
         },
         "compileOnly": true
       },
-      "System.Text.Encodings.Web/9.0.0.0": {
+      "System.Text.Encodings.Web.Reference/9.0.0.0": {
         "compile": {
           "System.Text.Encodings.Web.dll": {}
         },
         "compileOnly": true
       },
-      "System.Text.Json/9.0.0.0": {
+      "System.Text.Json.Reference/9.0.0.0": {
         "compile": {
           "System.Text.Json.dll": {}
         },
@@ -3464,12 +3480,12 @@
       "path": "microsoft.win32.registry/5.0.0",
       "hashPath": "microsoft.win32.registry.5.0.0.nupkg.sha512"
     },
-    "Mongo2Go/3.1.0": {
+    "Mongo2Go/4.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-XfCBLHIHv0I1Fkb9u67EkiaMTBKsvbVeboEh3i1Gp0+bcecJDpxKL6LcKU+QvhzrzMCBml7jsKy2BIRuJ/hXTA==",
-      "path": "mongo2go/3.1.0",
-      "hashPath": "mongo2go.3.1.0.nupkg.sha512"
+      "sha512": "sha512-QXpNsQj/k50aO5J/bTXP/0Jb43koXqQtoNAmJUuUfZ5DUtpTtsf3IUEYdJ4mAqtC2rqBKWD5lnm7xDaR6993WA==",
+      "path": "mongo2go/4.1.0",
+      "hashPath": "mongo2go.4.1.0.nupkg.sha512"
     },
     "MongoDB.Bson/3.4.0": {
       "type": "package",
@@ -3534,12 +3550,12 @@
       "path": "system.reflection.metadata/1.6.0",
       "hashPath": "system.reflection.metadata.1.6.0.nupkg.sha512"
     },
-    "System.Runtime.CompilerServices.Unsafe/5.0.0": {
+    "System.Runtime.CompilerServices.Unsafe/6.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZD9TMpsmYJLrxbbmdvhwt9YEgG5WntEnZ/d1eH8JBX9LBp+Ju8BSBhUGbZMNVHHomWo2KVImJhTDl2hIgw/6MA==",
-      "path": "system.runtime.compilerservices.unsafe/5.0.0",
-      "hashPath": "system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+      "sha512": "sha512-/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg==",
+      "path": "system.runtime.compilerservices.unsafe/6.0.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
     },
     "System.Security.AccessControl/5.0.0": {
       "type": "package",
@@ -3554,6 +3570,20 @@
       "sha512": "sha512-t0MGLukB5WAVU9bO3MGzvlGnyJPgUlcwerXn1kzBRjwLKixT96XV0Uza41W49gVd8zEMFu9vQEFlv0IOrytICA==",
       "path": "system.security.principal.windows/5.0.0",
       "hashPath": "system.security.principal.windows.5.0.0.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Vg8eB5Tawm1IFqj4TVK1czJX89rhFxJo9ELqc/Eiq0eXy13RK00eubyU6TJE6y+GQXjyV5gSfiewDUZjQgSE0w==",
+      "path": "system.text.encodings.web/6.0.0",
+      "hashPath": "system.text.encodings.web.6.0.0.nupkg.sha512"
+    },
+    "System.Text.Json/6.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NSB0kDipxn2ychp88NXWfFRFlmi1bst/xynOutbnpEfRCT9JZkZ7KOmF/I/hNKo2dILiMGnqblm+j1sggdLB9g==",
+      "path": "system.text.json/6.0.10",
+      "hashPath": "system.text.json.6.0.10.nupkg.sha512"
     },
     "xunit/2.9.0": {
       "type": "package",
@@ -3618,7 +3648,7 @@
       "path": "zstdsharp.port/0.7.3",
       "hashPath": "zstdsharp.port.0.7.3.nupkg.sha512"
     },
-    "LibraryAPI/1.0.0": {
+    "Library-gRPC-API/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -4843,12 +4873,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "System.Text.Encodings.Web/9.0.0.0": {
+    "System.Text.Encodings.Web.Reference/9.0.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
     },
-    "System.Text.Json/9.0.0.0": {
+    "System.Text.Json.Reference/9.0.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

@@ -4,118 +4,14 @@
     "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/LibraryAPI.FunctionalTests.csproj": {}
   },
   "projects": {
-    "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/LibraryAPI.FunctionalTests.csproj": {
+    "/Users/vivekkosare/Development/LibraryAPI/Library-gRPC-API/Library-gRPC-API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/LibraryAPI.FunctionalTests.csproj",
-        "projectName": "LibraryAPI.FunctionalTests",
-        "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/LibraryAPI.FunctionalTests.csproj",
+        "projectUniqueName": "/Users/vivekkosare/Development/LibraryAPI/Library-gRPC-API/Library-gRPC-API.csproj",
+        "projectName": "Library-gRPC-API",
+        "projectPath": "/Users/vivekkosare/Development/LibraryAPI/Library-gRPC-API/Library-gRPC-API.csproj",
         "packagesPath": "/Users/vivekkosare/.nuget/packages/",
-        "outputPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/obj/",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "/Users/vivekkosare/.nuget/NuGet/NuGet.Config"
-        ],
-        "originalTargetFrameworks": [
-          "net9.0"
-        ],
-        "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net9.0": {
-            "targetAlias": "net9.0",
-            "projectReferences": {
-              "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
-                "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
-      },
-      "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
-          "dependencies": {
-            "Google.Protobuf": {
-              "target": "Package",
-              "version": "[3.31.0, )"
-            },
-            "Grpc.Net.Client": {
-              "target": "Package",
-              "version": "[2.71.0, )"
-            },
-            "Grpc.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[2.72.0, )"
-            },
-            "Microsoft.AspNetCore.Mvc.Testing": {
-              "target": "Package",
-              "version": "[9.0.5, )"
-            },
-            "Microsoft.NET.Test.Sdk": {
-              "target": "Package",
-              "version": "[17.10.0, )"
-            },
-            "Mongo2Go": {
-              "target": "Package",
-              "version": "[3.1.0, )"
-            },
-            "coverlet.collector": {
-              "target": "Package",
-              "version": "[6.0.2, )"
-            },
-            "xunit": {
-              "target": "Package",
-              "version": "[2.9.0, )"
-            },
-            "xunit.runner.visualstudio": {
-              "target": "Package",
-              "version": "[2.8.2, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100-rc.1.24452.12/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj",
-        "projectName": "LibraryAPI",
-        "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj",
-        "packagesPath": "/Users/vivekkosare/.nuget/packages/",
-        "outputPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/obj/",
+        "outputPath": "/Users/vivekkosare/Development/LibraryAPI/Library-gRPC-API/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/vivekkosare/.nuget/NuGet/NuGet.Config"
@@ -191,6 +87,110 @@
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
             },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100-rc.1.24452.12/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/LibraryAPI.FunctionalTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/LibraryAPI.FunctionalTests.csproj",
+        "projectName": "LibraryAPI.FunctionalTests",
+        "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/LibraryAPI.FunctionalTests.csproj",
+        "packagesPath": "/Users/vivekkosare/.nuget/packages/",
+        "outputPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.FunctionalTests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/vivekkosare/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/vivekkosare/Development/LibraryAPI/Library-gRPC-API/Library-gRPC-API.csproj": {
+                "projectPath": "/Users/vivekkosare/Development/LibraryAPI/Library-gRPC-API/Library-gRPC-API.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Google.Protobuf": {
+              "target": "Package",
+              "version": "[3.31.0, )"
+            },
+            "Grpc.Net.Client": {
+              "target": "Package",
+              "version": "[2.71.0, )"
+            },
+            "Grpc.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.72.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[9.0.5, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.10.0, )"
+            },
+            "Mongo2Go": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.9.0, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.8.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
