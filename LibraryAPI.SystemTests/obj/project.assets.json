@@ -8069,11 +8069,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.SystemTests/LibraryAPI.SystemTests.csproj",
+      "projectUniqueName": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.SystemTests/LibraryAPI.SystemTests.csproj",
       "projectName": "LibraryAPI.SystemTests",
-      "projectPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.SystemTests/LibraryAPI.SystemTests.csproj",
+      "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.SystemTests/LibraryAPI.SystemTests.csproj",
       "packagesPath": "/Users/vivekkosare/.nuget/packages/",
-      "outputPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.SystemTests/obj/",
+      "outputPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.SystemTests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/vivekkosare/.nuget/NuGet/NuGet.Config"
@@ -8089,8 +8089,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
-              "projectPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj"
+            "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
+              "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj"
             }
           }
         }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.IntegrationTests/LibraryAPI.IntegrationTests.csproj": {}
+    "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.IntegrationTests/LibraryAPI.IntegrationTests.csproj": {}
   },
   "projects": {
-    "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.IntegrationTests/LibraryAPI.IntegrationTests.csproj": {
+    "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.IntegrationTests/LibraryAPI.IntegrationTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.IntegrationTests/LibraryAPI.IntegrationTests.csproj",
+        "projectUniqueName": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.IntegrationTests/LibraryAPI.IntegrationTests.csproj",
         "projectName": "LibraryAPI.IntegrationTests",
-        "projectPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.IntegrationTests/LibraryAPI.IntegrationTests.csproj",
+        "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.IntegrationTests/LibraryAPI.IntegrationTests.csproj",
         "packagesPath": "/Users/vivekkosare/.nuget/packages/",
-        "outputPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.IntegrationTests/obj/",
+        "outputPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.IntegrationTests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/vivekkosare/.nuget/NuGet/NuGet.Config"
@@ -27,8 +27,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
-                "projectPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj"
+              "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
+                "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj"
               }
             }
           }
@@ -102,14 +102,14 @@
         }
       }
     },
-    "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
+    "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj",
+        "projectUniqueName": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj",
         "projectName": "LibraryAPI",
-        "projectPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj",
+        "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj",
         "packagesPath": "/Users/vivekkosare/.nuget/packages/",
-        "outputPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/obj/",
+        "outputPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/vivekkosare/.nuget/NuGet/NuGet.Config"

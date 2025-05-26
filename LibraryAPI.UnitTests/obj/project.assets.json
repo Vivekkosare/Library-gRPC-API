@@ -2480,11 +2480,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.UnitTests/LibraryAPI.UnitTests.csproj",
+      "projectUniqueName": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.UnitTests/LibraryAPI.UnitTests.csproj",
       "projectName": "LibraryAPI.UnitTests",
-      "projectPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.UnitTests/LibraryAPI.UnitTests.csproj",
+      "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.UnitTests/LibraryAPI.UnitTests.csproj",
       "packagesPath": "/Users/vivekkosare/.nuget/packages/",
-      "outputPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI.UnitTests/obj/",
+      "outputPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI.UnitTests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/vivekkosare/.nuget/NuGet/NuGet.Config"
@@ -2500,8 +2500,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
-              "projectPath": "/Users/vivekkosare/Development/projects/LibraryAPI/LibraryAPI/LibraryAPI.csproj"
+            "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj": {
+              "projectPath": "/Users/vivekkosare/Development/LibraryAPI/LibraryAPI/LibraryAPI.csproj"
             }
           }
         }
