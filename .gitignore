@@ -23,6 +23,10 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
+# Ignore build output and intermediate files
+[Bb]in/
+[Oo]bj/
+
 # .NET Core
 project.lock.json
 project.fragment.lock.json
@@ -31,24 +35,50 @@ artifacts/
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider and VSCode settings
+.idea/
+.vscode/
+
+# Ignore test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
 # NuGet Packages
 *.nupkg
 # NuGet Symbol Packages
 *.snupkg
+packages/
 
-# Others
-~$*
-*~
+# Ignore logs and coverage
+[Ll]ogs/
+*.log
 CodeCoverage/
 
 # MSBuild Binary and Structured Log
 *.binlog
 
-# MSTest test Results
-[Tt]est[Rr]esult*/
-[Bb]uild[Ll]og.*
-
 # NUnit
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore publish output
+publish/
+
+# Ignore secrets and local config
+secrets.json
+appsettings.Development.json
+
+# Ignore generated proto files
+*.pb.cs
+*.proto.bin
