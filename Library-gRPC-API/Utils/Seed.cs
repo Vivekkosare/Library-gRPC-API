@@ -34,10 +34,18 @@ public static class Seed
                 Builders<Book>.Update.Set(b => b.TotalCopies, 70)
             );
 
+        await booksCollection.UpdateManyAsync(
+            Builders<Book>.Filter.Or(
+                Builders<Book>.Filter.Exists(b => b.NoOfPages, false),
+                Builders<Book>.Filter.Eq(b => b.NoOfPages, 0)
+            ),
+            Builders<Book>.Update.Set(b => b.NoOfPages, 500)
+        );
 
-            if (usersCollection.CountDocuments(FilterDefinition<User>.Empty) == 0)
-            {
-                var users = new List<User>
+
+        if (usersCollection.CountDocuments(FilterDefinition<User>.Empty) == 0)
+        {
+            var users = new List<User>
                 {
                     new User { Id="user1", Name = "User 1", Email = "user1@email.com" },
                     new User { Id="user2", Name = "User 2", Email = "user2@email.com" },
@@ -45,20 +53,20 @@ public static class Seed
                     new User { Id="user4", Name = "User 4", Email = "user4@email.com" },
                     new User { Id="user5", Name = "User 5", Email = "user5@email.com" },
                 };
-                usersCollection.InsertMany(users);
-            }
+            usersCollection.InsertMany(users);
+        }
 
-            IMongoCollection<UserBorrowedBook> userBorrowedBooks = database.GetCollection<UserBorrowedBook>("BorrowedBooks");
+        IMongoCollection<UserBorrowedBook> userBorrowedBooks = database.GetCollection<UserBorrowedBook>("BorrowedBooks");
 
-            if (userBorrowedBooks.CountDocuments(FilterDefinition<UserBorrowedBook>.Empty) == 0)
-            {
-                var borrowedBooksList = new List<BorrowedBook>();
-                var userIds = new[] { "user1", "user2", "user3", "user4", "user5" };
-                var bookIds = new[] { "book1", "book2", "book3", "book4", "book5" };
+        if (userBorrowedBooks.CountDocuments(FilterDefinition<UserBorrowedBook>.Empty) == 0)
+        {
+            var borrowedBooksList = new List<BorrowedBook>();
+            var userIds = new[] { "user1", "user2", "user3", "user4", "user5" };
+            var bookIds = new[] { "book1", "book2", "book3", "book4", "book5" };
 
-                // Example: user1 borrows book1 10 times, book2 5 times, book3 3 times, book4 2 times, book5 1 time
-                // user2 borrows book1 1 time, book2 10 times, etc.
-                int[,] borrowMatrix = new int[5, 5]
+            // Example: user1 borrows book1 10 times, book2 5 times, book3 3 times, book4 2 times, book5 1 time
+            // user2 borrows book1 1 time, book2 10 times, etc.
+            int[,] borrowMatrix = new int[5, 5]
                 {
                     { 10, 5, 3, 2, 1 }, // user1
                     { 1, 10, 5, 3, 2 }, // user2
