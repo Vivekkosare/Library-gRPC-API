@@ -63,7 +63,7 @@ The solution includes comprehensive test coverage with different types of test p
 
 1. **Clone the repository:**
    ```sh
-   git clone <repo-url>
+   git clone https://github.com/Vivekkosare/Library-gRPC-API.git
    cd LibraryAPI
    ```
 2. **Restore dependencies:**
