@@ -95,6 +95,76 @@ The solution includes comprehensive test coverage with different types of test p
 - Ensure MongoDB is running locally or update the connection string in `appsettings.json` as needed.
 - The API is designed for extensibility and can be deployed in cloud or containerized environments.
 
+## Testing the API with Postman (gRPC)
+
+You can use Postman to test the gRPC endpoints exposed by this API. Follow these steps:
+
+### 1. Start the API Server
+
+First, run the API locally:
+
+```sh
+# From the project root
+cd Library-gRPC-API
+# Run the API (it will start on http://localhost:5266)
+dotnet run
+```
+
+### 2. Create a Postman Collection
+
+- Open Postman.
+- Click **New** > **Collection** and give it a name (e.g., `Library gRPC API`).
+
+### 3. Add a gRPC Request
+
+- Inside your collection, click **Add Request** > **gRPC Request**.
+- In the request tab:
+  - For **Server**, enter: `localhost:5266`
+  - Click **Select Proto File** and choose the `library.proto` file from the `Library-gRPC-API/Protos/` directory.
+  - Select the desired service and method (e.g., `LibraryService/GetMostBorrowedBooks`).
+
+### 4. Example Requests
+
+Below are example request bodies for various endpoints. Paste these into the request body in Postman after selecting the appropriate method.
+
+#### GetMostBorrowedBooks
+```
+{
+  "start_time": { "seconds": 1742993208, "nanos": 0 },
+  "end_time":   { "seconds": 1748913208, "nanos": 0 }
+}
+```
+
+#### GetBookCopiesStatus
+```
+{
+    "book_id": "book3"
+}
+```
+
+#### GetBooksBorrowedByUserWithinTimeFrame
+```
+{
+  "start_time": { "seconds": 1746445301 },
+  "end_time":   { "seconds": 1747309301 },
+  "user_id": "user1"
+}
+```
+
+#### GetOtherBooksBorrowedByUserWhoBorrowedThisBook
+```
+{
+    "book_id": "book1"
+}
+```
+
+#### GetBookReadingRate
+```
+{
+    "book_id": "book2"
+}
+```
+
 ---
 
-For more details, see the code and comments in each project folder.
+For more details on request/response formats, see the `library.proto` file in the `Protos` directory.
